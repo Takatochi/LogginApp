@@ -13,7 +13,6 @@ func RunMigrations(store database.Database) {
 	}
 	migrator := base_migrate.NewMigrate(store)
 
-	// Виконуємо всі міграції
 	migrations := getMigrations(migrator)
 	for _, migration := range migrations {
 		err := migration.Up()
