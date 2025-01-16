@@ -7,6 +7,10 @@ import (
 )
 
 func RunMigrations(store database.Database) {
+	if store == nil {
+		log.Fatal("Store cannot be nil")
+		return
+	}
 	migrator := base_migrate.NewMigrate(store)
 
 	// Виконуємо всі міграції
