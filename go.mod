@@ -4,7 +4,6 @@ go 1.23
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	go.uber.org/fx v1.23.0
 	golang.org/x/net v0.34.0
 )
 
