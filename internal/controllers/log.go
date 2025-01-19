@@ -9,13 +9,15 @@ import (
 
 // LogController залежить від logService
 type LogController struct {
+	BaseController
 	logService services.LogService
 	logEntry   models.LogEntry
 }
 
-// NewLogController створює новий інстанс UserController
-func NewLogController(logService services.LogService) *LogController {
-	return &LogController{logService: logService}
+func NewLogController(base *BaseController) Controller {
+	return &LogController{
+		logService: base.service,
+	}
 }
 
 func (l *LogController) GetLog(ctx *gin.Context) {
@@ -26,4 +28,9 @@ func (l *LogController) GetLog(ctx *gin.Context) {
 	}
 	l.logService.Logs(&l.logEntry)
 	ctx.Status(http.StatusOK)
+}
+
+func (l *LogController) RegisterRoutes(router *gin.Engine) {
+
+	router.POST("/logs", l.GetLog)
 }

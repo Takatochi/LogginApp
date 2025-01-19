@@ -23,7 +23,7 @@ func (s *Server) HTTPServer(port string, router *gin.Engine) error {
 }
 func (s *Server) Run(config *config.Config, h *handler.Handler) error {
 
-	// init server add addr and router
+	// init server add addr and base_controller
 	err := s.HTTPServer(config.BindAddr, h.Routing())
 
 	return err

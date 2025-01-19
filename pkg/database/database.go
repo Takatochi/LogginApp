@@ -19,7 +19,11 @@ func NewGormDatabase(cfg Config) Database {
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s TimeZone=%s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.DBName, cfg.SSLMode, cfg.TimeZone,
 	)
-
+	//s := &sql.DB{}
+	//postgres.New(postgres.Config{
+	//	Conn: s,
+	//	DSN:  dsn,
+	//})
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Printf("Failed to connect to database: %v", err)

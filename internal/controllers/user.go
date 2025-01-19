@@ -9,16 +9,18 @@ import (
 
 // UserController залежить від UserService
 type UserController struct {
+	BaseController
 	userService services.UserService
 }
 
 // NewUserController створює новий інстанс UserController
-func NewUserController(userService services.UserService) *UserController {
-	return &UserController{userService: userService}
-}
+//func NewUserController(base *BaseController) Controller {
+//	return &UserController{BaseController: base.service}
+//}
 
 func (uc *UserController) GetUsers(ctx *gin.Context) {
 	users := uc.userService.GetAllUsers()
+
 	ctx.JSON(http.StatusOK, users)
 }
 
@@ -30,4 +32,9 @@ func (uc *UserController) CreateUser(ctx *gin.Context) {
 	}
 	newUser := uc.userService.CreateUser(user)
 	ctx.JSON(http.StatusCreated, newUser)
+}
+
+func (u *UserController) RegisterRoutes(router *gin.Engine) {
+	router.GET("/users", u.GetUsers)
+	router.POST("/users", u.CreateUser)
 }

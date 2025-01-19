@@ -12,8 +12,11 @@ func (u UserRepo) CreateUser(user *models.User) error {
 }
 
 func (u UserRepo) GetUserByID(id uint) (*models.User, error) {
-	//TODO implement me
-	panic("implement me")
+	byID, err := u.store.User().GetUserByID(id)
+	if err != nil {
+		return nil, err
+	}
+	return byID, nil
 }
 
 func (u UserRepo) UpdateUser(user *models.User) error {

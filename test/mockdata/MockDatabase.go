@@ -1,8 +1,8 @@
 package mockdata
 
 import (
+	"LoggingApp/internal/models"
 	"LoggingApp/pkg/database"
-	"fmt"
 	"gorm.io/driver/sqlite"
 
 	//"gorm.io/driver/sqlite"
@@ -16,11 +16,14 @@ type MockDatabase struct {
 
 // NewMockDatabase створює мок-реалізацію бази даних
 func NewMockDatabase() (database.Database, error) {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("failed to initialize in-memory database: %w", err)
+		return nil, err
 	}
-
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		return nil, err
+	}
 	return &MockDatabase{db: db}, nil
 }
 

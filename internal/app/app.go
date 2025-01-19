@@ -4,7 +4,7 @@ import (
 	"LoggingApp/internal/config"
 	"LoggingApp/internal/controllers"
 	"LoggingApp/internal/database/migrattion"
-	"LoggingApp/internal/repository/jsonbd"
+	"LoggingApp/internal/repository/postgres"
 	"LoggingApp/internal/services"
 	"LoggingApp/pkg/database"
 	"LoggingApp/pkg/handler"
@@ -30,9 +30,12 @@ type App struct {
 
 func NewApp(config config.Config) *App {
 
+	store := database.NewGormDatabase(config.Connection).GetDB()
+	repo := postgres.NewRepository(store)
+	services.NewService(repo)
 	app := &App{
 		config:  &config,
-		handler: handler.NewHandler(),
+		handler: handler.NewHandler(services.NewService(repo)),
 		srv:     new(server.Server),
 		store:   database.NewGormDatabase(config.Connection),
 	}
@@ -75,16 +78,11 @@ func (app *App) configureRouter() {
 		middleware.Logging(),
 	)
 
-	repo := jsonbd.NewRepository()
-	userController := controllers.NewUserController(services.NewUserService(repo))
+	repo := postgres.NewRepository(app.store.GetDB())
 
-	logController := controllers.NewLogController(services.NewlogService())
+	// Реєстрація сервісів
+	controller := controllers.NewBaseController(services.NewService(repo))
+	controller.AddSingleController(controllers.NewLogController)
 
-	router.POST("/logs", logController.GetLog)
-
-	api := router.Group("/api")
-	{
-		api.GET("/users", userController.GetUsers)
-		api.POST("/users", userController.CreateUser)
-	}
+	controller.RegisterRoutes(router)
 }
