@@ -33,4 +33,8 @@ func (l *LogController) GetLog(ctx *gin.Context) {
 func (l *LogController) RegisterRoutes(router *gin.Engine) {
 
 	router.POST("/logs", l.GetLog)
+	router.GET("/", func(ctx *gin.Context) {
+
+		ctx.Status(http.StatusOK)
+	})
 }

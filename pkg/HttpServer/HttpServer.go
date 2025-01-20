@@ -19,5 +19,5 @@ func (s *Server) HTTPServer(port string, router *gin.Engine) (*http.Server, erro
 		WriteTimeout:   10 * time.Second,
 	}
 
-	return &s.httpServer, s.httpServer.ListenAndServe()
+	return &s.httpServer, s.httpServer.ListenAndServeTLS("server.crt", "server.key")
 }

@@ -1,0 +1,19 @@
+
+1. Створити Docker образ:
+./Dockerfile
+
+docker build -t cert-generator .
+2. Запустити контейнер:
+
+docker run -d --name cert-container cert-generator
+3. Дочекатися завершення генерації сертифікатів (чекаємо 10 секунд):
+
+4. Копіювати сертифікати з контейнера на хост:
+docker cp cert-container:/certs/server.crt ./server.crt
+docker cp cert-container:/certs/server.key ./server.key
+
+5. Перевірити, чи файли були успішно скопійовані:
+ls -l ./server.crt ./server.key
+
+6. Видалити контейнер після завершення:
+docker rm -f cert-container
