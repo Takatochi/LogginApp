@@ -19,9 +19,7 @@ if exist ".\server.crt" if exist ".\server.key" (
     echo Помилка під час копіювання сертифікатів.
 )
 
-:: 6. Видаляємо контейнер після завершення
 docker rm -f %container_id%
 
-:: 7. Завершуємо скрипт
 echo Процес завершено!
 pause
